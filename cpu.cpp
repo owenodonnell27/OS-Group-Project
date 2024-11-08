@@ -1,24 +1,33 @@
 #include "cpu.h"
 #include <fstream>
+#include <sstream>
+#include <iostream>
 
 using namespace std;
 
 int myCpu::loadThreads(string filename) {
-
-    string line;
     ifstream f(filename);
+    string line;
+
     while (getline(f, line)) {
+        istringstream job(line);
         myThread newThread;
-        newThread.id = (int)line[0];
-        newThread.ttc = (int)line[2];
-        newThread.priority = (int)line[4];
-        newThread.toa = (int)line[6];
-        newThread.state = (int)line[8];
-        newThread.ioTime = (int)line[10];
+        
+        job >> newThread.id >> newThread.priority >> newThread.toa >> newThread.ttc >> newThread.state;
 
-        pq.push(newThread);
+        ready_queue.push(newThread);
     }
-
     f.close();
     return 0;
+}
+
+void myCpu::printThreads() {
+
+    while(!ready_queue.empty()) {
+        myThread thread = ready_queue.top();
+        cout << "ID: " << thread.id << ", Priority: " << thread.priority << ", TOA: " << thread.toa
+             << ", TTC: " << thread.ttc << ", State:" << thread.state << endl;
+
+        ready_queue.pop();
+    }
 }

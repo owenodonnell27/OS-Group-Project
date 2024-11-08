@@ -1,21 +1,13 @@
-#include <iostream> 
-#include <fstream>
-#include <string>
-#include <vector>
+#include <iostream>
 #include "cpu.h"
 
 using namespace std;
 
 int main() {
-    cout << "CPU boot up" << endl; 
-
     myCpu myCpu;
 
     myCpu.loadThreads("jobs.txt");
-    myThread t = myCpu.pq.top();
-    int x = t.id;
-
-    cout << x << endl;
+    myCpu.printThreads();
 
     return 0;
 }

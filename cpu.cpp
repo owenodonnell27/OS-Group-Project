@@ -1,17 +1,22 @@
-#include <iostream> 
+#include "cpu.h"
 #include <fstream>
-#include <string>
 
 using namespace std;
 
-int main() {
-    cout << "CPU boot up" << endl; 
+int myCpu::loadThreads(string filename) {
 
-    // Print out the list of jobs
-    ifstream f("jobs.txt");
     string line;
+    ifstream f(filename);
     while (getline(f, line)) {
-        cout << "Job #" << line[0] << ", Time = " << line[2] << endl;
+        myThread newThread;
+        newThread.id = (int)line[0];
+        newThread.ttc = (int)line[2];
+        newThread.priority = (int)line[4];
+        newThread.toa = (int)line[6];
+        newThread.state = (int)line[8];
+        newThread.ioTime = (int)line[10];
+
+        pq.push(newThread);
     }
 
     f.close();

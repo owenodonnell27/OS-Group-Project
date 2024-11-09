@@ -16,27 +16,35 @@ int MyCpu::loadThreadsFromFile(string filename) {
         
         job >> newThread.id >> newThread.priority >> newThread.toa >> newThread.ttc >> newThread.state;
 
-        ready_queue.push(newThread);
+        readyQueue.push(newThread);
     }
     f.close();
     return 0;
 }
 
 int MyCpu::loadThread(MyThread thread) {
-    allThreads.push_back(thread);
+    // Add thread to the vector of future threads
+    futureThreads.push_back(thread);
 
-    sort(allThreads.begin(), allThreads.end(), [](const MyThread &a, const MyThread &b) {return a.toa > b.toa;});
+    // Sort threads so that the threads with the closest toa are towards the end
+    sort(futureThreads.begin(), futureThreads.end(), [](const MyThread &a, const MyThread &b) {return a.toa > b.toa;});
     return 0;
 }
 
 int MyCpu::runNextThread() {
-    running = ready_queue.top();
-    ready_queue.pop();
+    // The thread with the highest priority becomes the running thread
+    running = readyQueue.top();
+    readyQueue.pop();
     cout << "Thread " << running.id << " taking the CPU." << endl;
+
+    // Thread using the CPU
     running.ttc -= timeSlice;
     cout << "Thread " << running.id << " doing work on the CPU. Has " << running.ttc << " left." << endl;
+
+    // Depening if the thread still needs to the CPU it will be added back to ready queue
+    // otherwise, it will be forgotten
     if(running.ttc > 0) {
-        ready_queue.push(running);
+        readyQueue.push(running);
         cout << "Thread " << running.id << " giving up the CPU." << endl;
     }
     else {
@@ -46,33 +54,37 @@ int MyCpu::runNextThread() {
 }
 
 int MyCpu::runCPU() {
-    while(!ready_queue.empty() || !allThreads.empty()) {
+    cout << "Time " << time << endl;
+    // As long as there are threads in the readyQueue or coming in the future
+    while(!readyQueue.empty() || !futureThreads.empty()) {
 
-        if(!allThreads.empty()) {
-            while(allThreads.back().toa == time) {
+        // Check if the threads in futureThreads can be added to readyQueue
+        if(!futureThreads.empty()) {
+            while(futureThreads.back().toa == time) {
                 cout << "Adding thread to pq\n";
-                MyThread readyThread = allThreads.back();
-                allThreads.pop_back();
-                ready_queue.push(readyThread);
+                MyThread readyThread = futureThreads.back();
+                futureThreads.pop_back();
+                readyQueue.push(readyThread);
             }
         }
-        if(!ready_queue.empty()) {
+        // If there are threads in readyQueue, let them use the CPU
+        if(!readyQueue.empty()) {
             cout << "Running next thread\n";
             runNextThread();
         }
+        // Increment the time
         time++;
-        cout << "Time is now " << time << endl;
     }
     return 0;
 }
 
 void MyCpu::printThreads() {
 
-    while(!ready_queue.empty()) {
-        MyThread thread = ready_queue.top();
+    while(!readyQueue.empty()) {
+        MyThread thread = readyQueue.top();
         cout << "ID: " << thread.id << ", Priority: " << thread.priority << ", TOA: " << thread.toa
              << ", TTC: " << thread.ttc << ", State:" << thread.state << endl;
 
-        ready_queue.pop();
+        readyQueue.pop();
     }
 }

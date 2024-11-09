@@ -16,13 +16,13 @@ public:
     // Load one thread
     int loadThread(MyThread thread);
 
-    // Function to run the next thread in the ready_queue
+    // Function to run the next thread in the readyQueue
     int runNextThread();
 
     // Run the CPU which wont stop until all the threads are done
     int runCPU();
 
-    // print all the threads in the ready_queue (was used mostly for testing/debugging)
+    // print all the threads in the readyQueue (was used mostly for testing/debugging)
     void printThreads();
 
     // Set the time that the CPU is at
@@ -36,7 +36,7 @@ private:
     vector<MyThread> futureThreads;
 
     // All threads that are ready
-    priority_queue<MyThread> ready_queue;
+    priority_queue<MyThread> readyQueue;
 
     // The one thread that is running
     MyThread running;

@@ -54,10 +54,10 @@ int MyCpu::runNextThread() {
 }
 
 int MyCpu::runCPU() {
-    cout << "Time " << time << endl;
+    
     // As long as there are threads in the readyQueue or coming in the future
     while(!readyQueue.empty() || !futureThreads.empty()) {
-
+        cout << "Time " << time << endl;
         // Check if the threads in futureThreads can be added to readyQueue
         if(!futureThreads.empty()) {
             while(futureThreads.back().toa == time) {

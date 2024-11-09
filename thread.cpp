@@ -1,6 +1,6 @@
 #include "thread.h"
 
-bool myThread::operator<(const myThread& otherThread) const {
+bool MyThread::operator<(const MyThread& otherThread) const {
     if(priority == otherThread.priority) {
         return toa > otherThread.toa;
     }

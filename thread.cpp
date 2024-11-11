@@ -9,3 +9,13 @@ bool MyThread::operator<(const MyThread& otherThread) const {
         return priority > otherThread.priority;
     }
 }
+
+// Returns the thread's turn around time
+int MyThread::getTurnAround() {
+    return turnAround - toa + 1;
+}
+
+// Returns the thread's response time
+int MyThread::getResponseTime() {
+    return responseTime - toa;
+}

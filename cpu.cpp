@@ -36,9 +36,18 @@ int MyCpu::runNextThread() {
     running = readyQueue.top();
     readyQueue.pop();
     cout << "Thread " << running.id << " taking the CPU." << endl;
-
     // Thread using the CPU
     running.ttc -= timeSlice;
+
+    // Set the turnAround variable to the time. If this is the last cycle the thread uses the cpu,
+    // it will be able to calculate its turn around.
+    running.setTurnAround(time);
+
+    // The first time that the thread uses the cpu, log the time to get the response time
+    if(running.responseTime == -1) {
+        running.responseTime = time;
+    }
+
     cout << "Thread " << running.id << " doing work on the CPU. Has " << running.ttc << " left." << endl;
 
     // Depening if the thread still needs to the CPU it will be added back to ready queue
@@ -48,6 +57,7 @@ int MyCpu::runNextThread() {
         cout << "Thread " << running.id << " giving up the CPU." << endl;
     }
     else {
+        completedThreads.push_back(running);
         cout << "Thread " << running.id << " is done." << endl;
     }
     return 0;
@@ -61,7 +71,7 @@ int MyCpu::runCPU() {
         // Check if the threads in futureThreads can be added to readyQueue
         if(!futureThreads.empty()) {
             while(futureThreads.back().toa == time) {
-                cout << "Adding thread to pq\n";
+                cout << "Adding thread to ready queue\n";
                 MyThread readyThread = futureThreads.back();
                 futureThreads.pop_back();
                 readyQueue.push(readyThread);
@@ -78,7 +88,7 @@ int MyCpu::runCPU() {
     return 0;
 }
 
-void MyCpu::printThreads() {
+void MyCpu::printReadyThreads() {
 
     while(!readyQueue.empty()) {
         MyThread thread = readyQueue.top();
@@ -86,5 +96,12 @@ void MyCpu::printThreads() {
              << ", TTC: " << thread.ttc << ", State:" << thread.state << endl;
 
         readyQueue.pop();
+    }
+}
+
+// print all threads once completed
+void MyCpu::printCompletedThreads() {
+    for(MyThread thread: completedThreads) {
+        cout << "Thread: " << thread.id << " Turn around time: " << thread.getTurnAround() << " Response time: "<< thread.getResponseTime() << endl;
     }
 }

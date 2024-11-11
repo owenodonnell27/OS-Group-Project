@@ -10,6 +10,9 @@ using namespace std;
 
 class MyCpu {
 public:
+    // Creates MyCpu class with time = 0 the default
+    MyCpu(): time(0) {}
+
     // Load files from a file (currently disabled)
     int loadThreadsFromFile(string filename);
 
@@ -23,7 +26,11 @@ public:
     int runCPU();
 
     // print all the threads in the readyQueue (was used mostly for testing/debugging)
-    void printThreads();
+    // *IMPORTANT* As of now, it will remove all the threads from the queue as it prints them
+    void printReadyThreads();
+
+    // print all threads once completed
+    void printCompletedThreads();
 
     // Set the time that the CPU is at
     void setTime(int newTime) {time = newTime;}
@@ -37,6 +44,9 @@ private:
 
     // All threads that are ready
     priority_queue<MyThread> readyQueue;
+
+    // Completed threads
+    vector<MyThread> completedThreads;
 
     // The one thread that is running
     MyThread running;

@@ -14,11 +14,13 @@ int main() {
     myCpu.loadThread(myThread2);
 
     // Set the CPU to start at time = 0 and timeSlice = 1
-    myCpu.setTime(0);
+    // myCpu.setTime(0);
     myCpu.setTimeSlice(1);
 
     // Start the CPU
     myCpu.runCPU();
+
+    myCpu.printCompletedThreads();
 
     return 0;
 }

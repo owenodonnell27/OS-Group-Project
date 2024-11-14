@@ -5,7 +5,7 @@ class MyThread {
 public:    
     // Thread constructors
     MyThread() {}
-    MyThread(int id, int priority, int toa, int ttc, int state): 
+    MyThread(int id, int priority, long long toa, long long ttc, int state): 
         id(id), priority(priority), toa(toa), ttc(ttc), state(state), turnAround(-1), responseTime(-1) {}
 
     // operator overloading used for CPU's priority queue
@@ -25,17 +25,17 @@ public:
     int priority;
 
     // Time of arrival
-    int toa;    
+    long long toa;    
 
     // Time to complete
-    int ttc;    
+    long long ttc;    
 
     // 1: running, 2: ready, 3: blocked, 0: otherwise
     int state;
 
     // These variables will be changed by the CPU to help calculate turn around, waiting time, and response time
-    int turnAround;
-    int responseTime;
+    long long turnAround;
+    long long responseTime;
 };
 
 #endif

@@ -1,25 +1,34 @@
 #include <iostream>
+#include <fstream>
 #include "cpu.h"
 
 using namespace std;
 
-int main() {
-    // Init the CPU and threads
+int main(int argc, char* argv[]) {
+    // Check if the filename is provided
+    if (argc != 2) {
+        cerr << "Usage: ./scheduler <filename>" << endl;
+        return 1;
+    }
+
+    string filename = argv[1];
+
+    // Initialize the CPU
     MyCpu myCpu;
-    MyThread myThread1(1, 2, 1, 5, 0);
-    MyThread myThread2(2, 1, 3, 2, 0);
 
-    // Load the threads to the CPU
-    myCpu.loadThread(myThread1);
-    myCpu.loadThread(myThread2);
+    // Load threads from the file
+    if (myCpu.loadThreadsFromFile(filename) != 0) {
+        cerr << "Error loading threads from file: " << filename << endl;
+        return 1;
+    }
 
-    // Set the CPU to start at time = 0 and timeSlice = 1
-    // myCpu.setTime(0);
+    // Set the CPU time slice (example: 1 unit)
     myCpu.setTimeSlice(1);
 
-    // Start the CPU
+    // Run the CPU simulation
     myCpu.runCPU();
 
+    // Print completed thread statistics
     myCpu.printCompletedThreads();
 
     return 0;

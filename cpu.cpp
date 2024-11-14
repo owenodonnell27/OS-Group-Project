@@ -36,19 +36,22 @@ int MyCpu::runNextThread() {
     running = readyQueue.top();
     readyQueue.pop();
     cout << "Thread " << running.id << " taking the CPU." << endl;
-    // Thread using the CPU
-    running.ttc -= timeSlice;
-
-    // Set the turnAround variable to the time. If this is the last cycle the thread uses the cpu,
-    // it will be able to calculate its turn around.
-    running.setTurnAround(time);
 
     // The first time that the thread uses the cpu, log the time to get the response time
     if(running.responseTime == -1) {
         running.responseTime = time;
-    }
 
+        //Debug statement
+        cout << "Debug: Setting response time for Thread " << running.id << " to " << running.responseTime << endl;
+    }
+    
+    // Thread using the CPU
+    running.ttc -= timeSlice;
     cout << "Thread " << running.id << " doing work on the CPU. Has " << running.ttc << " left." << endl;
+
+    // Set the turnAround variable to the time. If this is the last cycle the thread uses the cpu,
+    // it will be able to calculate its turn around.
+    //running.setTurnAround(time);
 
     // Depening if the thread still needs to the CPU it will be added back to ready queue
     // otherwise, it will be forgotten
@@ -57,6 +60,8 @@ int MyCpu::runNextThread() {
         cout << "Thread " << running.id << " giving up the CPU." << endl;
     }
     else {
+        // If the thread has completed, set the turnAround time
+        running.turnAround = time + 1 - running.toa;
         completedThreads.push_back(running);
         cout << "Thread " << running.id << " is done." << endl;
     }
@@ -71,7 +76,8 @@ int MyCpu::runCPU() {
         // Check if the threads in futureThreads can be added to readyQueue
         if(!futureThreads.empty()) {
             while(futureThreads.back().toa == time) {
-                cout << "Adding thread to ready queue\n";
+                //cout << "Adding thread to ready queue\n";
+                cout << "Debug: Adding thread " << futureThreads.back().id << " to ready queue at time " << time << endl;
                 MyThread readyThread = futureThreads.back();
                 futureThreads.pop_back();
                 readyQueue.push(readyThread);
@@ -79,7 +85,8 @@ int MyCpu::runCPU() {
         }
         // If there are threads in readyQueue, let them use the CPU
         if(!readyQueue.empty()) {
-            cout << "Running next thread\n";
+            //cout << "Running next thread\n";
+            cout << "Debug: Running next thread from ready queue at time " << time << endl;
             runNextThread();
         }
         // Increment the time

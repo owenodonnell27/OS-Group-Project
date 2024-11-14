@@ -10,13 +10,18 @@ int MyCpu::loadThreadsFromFile(string filename) {
     ifstream f(filename);
     string line;
 
+    // Using the data on each line of the supplied file, create a thread and add it to the CPU
     while (getline(f, line)) {
         istringstream job(line);
-        MyThread newThread;
-        
-        job >> newThread.id >> newThread.priority >> newThread.toa >> newThread.ttc >> newThread.state;
+        vector<int> jobArgs;
+        int arg;
 
-        readyQueue.push(newThread);
+        while(job >> arg) {
+            jobArgs.push_back(arg);
+        }
+
+        MyThread newThread(jobArgs[0], jobArgs[1], jobArgs[2], jobArgs[3]);
+        loadThread(newThread);
     }
     f.close();
     return 0;
@@ -49,10 +54,6 @@ int MyCpu::runNextThread() {
     running.ttc -= timeSlice;
     cout << "Thread " << running.id << " doing work on the CPU. Has " << running.ttc << " left." << endl;
 
-    // Set the turnAround variable to the time. If this is the last cycle the thread uses the cpu,
-    // it will be able to calculate its turn around.
-    //running.setTurnAround(time);
-
     // Depening if the thread still needs to the CPU it will be added back to ready queue
     // otherwise, it will be forgotten
     if(running.ttc > 0) {
@@ -61,7 +62,7 @@ int MyCpu::runNextThread() {
     }
     else {
         // If the thread has completed, set the turnAround time
-        running.turnAround = time + 1 - running.toa;
+        running.toc = time + 1;
         completedThreads.push_back(running);
         cout << "Thread " << running.id << " is done." << endl;
     }

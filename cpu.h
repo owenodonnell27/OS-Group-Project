@@ -38,6 +38,8 @@ public:
     // Set how much time the CPU works on one thread for
     void setTimeSlice(int newTimeSlice) {timeSlice = newTimeSlice;}
 
+    void ageThreads();
+
 private:
     // Threads that will arrive in the future
     vector<MyThread> futureThreads;

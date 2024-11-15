@@ -16,16 +16,12 @@ public:
     int getTurnAround();
 
     // Returns the thread's response time
-    int getResponseTime();
+    long long getResponseTime();
 
     int id;
     int priority;
-
-    // Time of arrival
-    long long toa;    
-
-    // Time to complete
-    long long ttc;    
+    int toa; // Time of arrival
+    int ttc; // Time to complete
 
     // 1: running, 2: ready, 3: blocked, 0: otherwise
     int state;
@@ -33,7 +29,8 @@ public:
     // Time of completion
     long long toc;
 
-    // Time when the thread first gets to use the cpu
+    // These variables will be changed by the CPU to help calculate turn around, waiting time, and response time
+    int turnAround;
     long long responseTime;
 };
 

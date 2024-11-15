@@ -16,6 +16,6 @@ int MyThread::getTurnAround() {
 }
 
 // Returns the thread's response time
-int MyThread::getResponseTime() {
+long long MyThread::getResponseTime() {
     return (responseTime >= toa) ? responseTime - toa : 0;  // Ensure no negative value
 }

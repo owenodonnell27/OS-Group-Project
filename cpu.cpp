@@ -109,9 +109,24 @@ void MyCpu::printReadyThreads() {
 
 // print all threads once completed
 void MyCpu::printCompletedThreads() {
-    for(MyThread thread: completedThreads) {
-        cout << "Thread: " << thread.id << " Turn around time: " << thread.getTurnAround() << " Response time: "<< thread.getResponseTime() << endl;
+    cout << "==============================" << endl;
+    cout << "Statistics" << endl;
+    cout << "------------------------------" << endl;
+    for (MyThread thread : completedThreads) {
+        /* Debug: Print all details of the thread before printing statistics
+        cout << "Debug: Thread ID: " << thread.id
+             << ", TOA: " << thread.toa
+             << ", Turn around time: " << thread.turnAround
+             << ", Response time: " << thread.responseTime << endl;
+        */
+
+        cout << "Thread: " << thread.id 
+             << "    Turn around time: " << thread.getTurnAround()
+             << "    Response time: " << thread.getResponseTime() << endl;
     }
+  cout << "==============================" << endl;
+  printCPUStats();
+  cout << "==============================" << endl;
 }
 
 // print cpu stats (average response time, average turnaround)

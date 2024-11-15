@@ -12,11 +12,11 @@ bool MyThread::operator<(const MyThread& otherThread) const {
 
 // Returns the thread's turn around time
 int MyThread::getTurnAround() {
-    return (turnAround == -1) ? 0 : turnAround - toa; // Ensure no negative value
+    return (toc == -1) ? 0 : toc - toa; // Ensure no negative value
 }
 
 // Returns the thread's response time
-int MyThread::getResponseTime() {
+long long MyThread::getResponseTime() {
     return (responseTime >= toa) ? responseTime - toa : 0;  // Ensure no negative value
 }
 

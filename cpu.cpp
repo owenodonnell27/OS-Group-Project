@@ -140,9 +140,11 @@ void MyCpu::printCompletedThreads() {
         */
 
         cout << "Thread: " << thread.id 
-             << "    Turn around time: " << thread.turnAround 
-             << "    Response time: " << thread.responseTime << endl;
+             << "    Turn around time: " << thread.getTurnAround()
+             << "    Response time: " << thread.getResponseTime() << endl;
     }
+  cout << "==============================" << endl;
+  printCPUStats();
   cout << "==============================" << endl;
 }
 

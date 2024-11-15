@@ -31,8 +31,5 @@ int main(int argc, char* argv[]) {
     // Print completed thread statistics
     myCpu.printCompletedThreads();
 
-    // Print out the CPU statistics
-    myCpu.printCPUStats();
-
     return 0;
 }

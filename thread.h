@@ -18,10 +18,24 @@ public:
     // Returns the thread's response time
     long long getResponseTime();
 
+    //setter and getter for priority
+    int getPriority();
+    void setPriority(int newPriority);
+
+    //age the thread
+    void age();
+
     int id;
     int priority;
-    int toa; // Time of arrival
-    int ttc; // Time to complete
+
+    //time in ready or blocked state
+    int waitTime;
+
+    // Time of arrival
+    long long toa;    
+
+    // Time to complete
+    long long ttc;    
 
     // 1: running, 2: ready, 3: blocked, 0: otherwise
     int state;

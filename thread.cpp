@@ -19,3 +19,23 @@ int MyThread::getTurnAround() {
 long long MyThread::getResponseTime() {
     return (responseTime >= toa) ? responseTime - toa : 0;  // Ensure no negative value
 }
+
+//returns thread priority
+int MyThread::getPriority(){
+    return priority;
+}
+
+//set current thread priority
+void MyThread::setPriority(int newPriority){
+    priority = newPriority;
+}
+
+//age implementation
+void MyThread::age(){
+    waitTime++;
+    if (waitTime >= 3){
+        if (priority > 1)
+            priority--;
+    }
+}
+

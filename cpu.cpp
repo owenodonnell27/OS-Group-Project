@@ -109,10 +109,17 @@ int MyCpu::runCPU() {
             //cout << "Debug: Running next thread from ready queue at time " << time << endl;
             runNextThread();
         }
-        // Increment the time
+        // Increment the time and age threads
         time++;
+        ageThreads();
     }
     return 0;
+}
+
+void MyCpu::ageThreads(){
+    for (int i = 0; i < blocked.size(); i++){
+        blocked[i].age();
+    }
 }
 
 void MyCpu::printReadyThreads() {

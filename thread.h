@@ -3,9 +3,11 @@
 
 class MyThread {
 public:    
-    // Thread constructors
-    MyThread() {}
-    MyThread(int id, int priority, long long toa, long long ttc, int state): 
+    // Default Constructor
+    MyThread() : id(0), priority(0), toa(0), ttc(0), state(0), turnAround(-1), responseTime(-1) {}
+
+    // Parameterized Constructor
+    MyThread(int id, int priority, int toa, int ttc, int state): 
         id(id), priority(priority), toa(toa), ttc(ttc), state(state), turnAround(-1), responseTime(-1) {}
 
     // operator overloading used for CPU's priority queue
@@ -19,22 +21,18 @@ public:
     int getTurnAround();
 
     // Returns the thread's response time
-    int getResponseTime();
+    long long getResponseTime();
 
     int id;
     int priority;
-
-    // Time of arrival
-    long long toa;    
-
-    // Time to complete
-    long long ttc;    
+    int toa; // Time of arrival
+    int ttc; // Time to complete
 
     // 1: running, 2: ready, 3: blocked, 0: otherwise
     int state;
 
     // These variables will be changed by the CPU to help calculate turn around, waiting time, and response time
-    long long turnAround;
+    int turnAround;
     long long responseTime;
 };
 

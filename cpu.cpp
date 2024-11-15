@@ -62,7 +62,7 @@ int MyCpu::runNextThread() {
     }
     else {
         // If the thread has completed, set the turnAround time
-        running.toc = time + 1;
+        running.toc = time + timeSlice;
         completedThreads.push_back(running);
         cout << "Thread " << running.id << " is done." << endl;
     }
@@ -112,4 +112,24 @@ void MyCpu::printCompletedThreads() {
     for(MyThread thread: completedThreads) {
         cout << "Thread: " << thread.id << " Turn around time: " << thread.getTurnAround() << " Response time: "<< thread.getResponseTime() << endl;
     }
+}
+
+// print cpu stats (average response time, average turnaround)
+void MyCpu::printCPUStats() {
+
+    // Does so by taking the average of all the thread stats
+    int numThreads = 0;
+    float responseSum = 0;
+    float turnAroundSum = 0;
+
+    for(MyThread thread: completedThreads) {
+        numThreads++;
+        responseSum += thread.getResponseTime();
+        turnAroundSum += thread.getTurnAround();
+    }
+
+    float averageResponse = responseSum / numThreads;
+    float averageTurnAround = turnAroundSum / numThreads;
+
+    cout << "The average response time was " << averageResponse << " and the average turn around was " << averageTurnAround << endl;
 }

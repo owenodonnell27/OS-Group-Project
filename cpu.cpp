@@ -14,13 +14,18 @@ int MyCpu::loadThreadsFromFile(string filename) {
     ifstream f(filename);
     string line;
 
+    // Using the data on each line of the supplied file, create a thread and add it to the CPU
     while (getline(f, line)) {
         istringstream job(line);
-        MyThread newThread;
-        
-        job >> newThread.id >> newThread.priority >> newThread.toa >> newThread.ttc >> newThread.state;
+        vector<int> jobArgs;
+        int arg;
 
-        readyQueue.push(newThread);
+        while(job >> arg) {
+            jobArgs.push_back(arg);
+        }
+
+        MyThread newThread(jobArgs[0], jobArgs[1], jobArgs[2], jobArgs[3]);
+        loadThread(newThread);
     }
     f.close();
     return 0;
@@ -60,19 +65,18 @@ int MyCpu::runNextThread() {
     running.ttc -= timeSlice;
     cout << "Thread " << running.id << " doing work on the CPU. Has " << running.ttc << " left." << endl;
 
-    // Check if the thread has completed its work
-    if (running.ttc <= 0) {
-        running.turnAround = (time + 1) - running.toa;  // Correct turnaround time calculation
-        //cout << "Debug: Calculated Turnaround Time for Thread " << running.id << ": " << running.turnAround << endl;
-        MyThread completedThread = running;  // Make a copy of `running`
-        completedThreads.push_back(completedThread);  // Push the copy to avoid shallow copy issues
-        cout << "Thread " << running.id << " is done." << endl;
-    }
- else {
+    // Depening if the thread still needs to the CPU it will be added back to ready queue
+    // otherwise, it will be forgotten
+    if(running.ttc > 0) {
         readyQueue.push(running);
         cout << "Thread " << running.id << " giving up the CPU." << endl;
     }
-
+    else {
+        // If the thread has completed, set the turnAround time
+        running.toc = time + timeSlice;
+        completedThreads.push_back(running);
+        cout << "Thread " << running.id << " is done." << endl;
+    }
     return 0;
 }
 
@@ -139,9 +143,28 @@ void MyCpu::printCompletedThreads() {
              << "    Turn around time: " << thread.turnAround 
              << "    Response time: " << thread.responseTime << endl;
     }
-    cout << "==============================" << endl;
+  cout << "==============================" << endl;
 }
 
+// print cpu stats (average response time, average turnaround)
+void MyCpu::printCPUStats() {
+
+    // Does so by taking the average of all the thread stats
+    int numThreads = 0;
+    float responseSum = 0;
+    float turnAroundSum = 0;
+
+    for(MyThread thread: completedThreads) {
+        numThreads++;
+        responseSum += thread.getResponseTime();
+        turnAroundSum += thread.getTurnAround();
+    }
+
+    float averageResponse = responseSum / numThreads;
+    float averageTurnAround = turnAroundSum / numThreads;
+
+    cout << "The average response time was " << averageResponse << " and the average turn around was " << averageTurnAround << endl;
+}
 
 // print arrival time of threads
 void MyCpu::printArrivalTimes() {

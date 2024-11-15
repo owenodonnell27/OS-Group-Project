@@ -32,6 +32,9 @@ public:
     // print all threads once completed
     void printCompletedThreads();
 
+    // print cpu stats (average response time, average turnaround)
+    void printCPUStats();
+  
     // print threads arrival time
     void printArrivalTimes();
 

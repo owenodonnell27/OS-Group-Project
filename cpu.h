@@ -11,7 +11,7 @@ using namespace std;
 class MyCpu {
 public:
     // Creates MyCpu class with time = 0 the default
-    MyCpu(): time(0) {}
+    MyCpu();
 
     // Load files from a file (currently disabled)
     int loadThreadsFromFile(string filename);
@@ -34,6 +34,9 @@ public:
 
     // print cpu stats (average response time, average turnaround)
     void printCPUStats();
+  
+    // print threads arrival time
+    void printArrivalTimes();
 
     // Set the time that the CPU is at
     void setTime(int newTime) {time = newTime;}

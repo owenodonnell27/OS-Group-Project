@@ -1,4 +1,7 @@
 #include "thread.h"
+#include <iostream>
+
+using namespace std;
 
 bool MyThread::operator<(const MyThread& otherThread) const {
     // If the threads have the same priority, the one that arrived first gets priority
@@ -32,10 +35,16 @@ void MyThread::setPriority(int newPriority){
 
 //age implementation
 void MyThread::age(){
+    // Increase the threads waiting time
     waitTime++;
-    if (waitTime >= 3){
-        if (priority > 1)
+
+    // If a threads as been waiting for longer than 3 units of time, increase the thread's priority and set the waiting time to 0
+    if (waitTime > 3){
+        if (priority > 1) {
             priority--;
+            waitTime = 0;
+            cout << "Thread " << id << "'s priority has increased to " << priority << endl;
+        }
     }
 }
 

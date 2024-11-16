@@ -15,6 +15,7 @@ int MyCpu::loadThreadsFromFile(string filename) {
     string line;
 
     // Using the data on each line of the supplied file, create a thread and add it to the CPU
+    // The four arguments that the file has are (1): ID, (2): Priority, (3): Time of Arrival, (4): Time to completion
     while (getline(f, line)) {
         istringstream job(line);
         vector<int> jobArgs;
@@ -63,6 +64,7 @@ int MyCpu::runNextThread() {
 
     // Thread using the CPU
     running.ttc -= timeSlice;
+    running.waitTime = 0;
     cout << "Thread " << running.id << " doing work on the CPU. Has " << running.ttc << " left." << endl;
 
     // Depening if the thread still needs to the CPU it will be added back to ready queue
@@ -85,7 +87,7 @@ int MyCpu::runCPU() {
     
     // As long as there are threads in the readyQueue or coming in the future
     while(!readyQueue.empty() || !futureThreads.empty()) {
-        cout << "Time " << time << endl;
+        
         // Check if the threads in futureThreads can be added to readyQueue
         if(!futureThreads.empty()) {
             /* while(futureThreads.back().toa == time) {
@@ -105,7 +107,6 @@ int MyCpu::runCPU() {
         }
         // If there are threads in readyQueue, let them use the CPU
         if(!readyQueue.empty()) {
-            cout << "Running next thread\n";
             //cout << "Debug: Running next thread from ready queue at time " << time << endl;
             runNextThread();
         }
@@ -117,13 +118,32 @@ int MyCpu::runCPU() {
 }
 
 void MyCpu::ageThreads(){
-    for (int i = 0; i < blocked.size(); i++){
-        blocked[i].age();
+    // Vector to store threads while they are out of the queue
+    vector<MyThread> readyThreads;
+    
+    // Remove all the threads from the queue
+    while(!readyQueue.empty()) {
+        readyThreads.push_back(readyQueue.top());
+        readyQueue.pop();
+    }
+
+    // Make aging adjustments
+    int s = readyThreads.size();
+    for (int i = 0; i < s; i++){
+        cout << "ID: " << readyThreads[i].id << " Priority: " << readyThreads[i].priority << " Wait: " << readyThreads[i].waitTime << endl;
+        readyThreads[i].age();
+    }
+
+    // Add threads back to the queue
+    while(!readyThreads.empty()) {
+        readyQueue.push(readyThreads.back());
+        readyThreads.pop_back();
     }
 }
 
 void MyCpu::printReadyThreads() {
 
+    // Print all the threads
     while(!readyQueue.empty()) {
         MyThread thread = readyQueue.top();
         cout << "ID: " << thread.id << ", Priority: " << thread.priority << ", TOA: " << thread.toa

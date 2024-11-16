@@ -14,22 +14,22 @@ int main(int argc, char* argv[]) {
     string filename = argv[1];
 
     // Initialize the CPU
-    MyCore MyCore;
+    MyCpu MyCpu;
 
     // Load threads from the file
-    if (MyCore.loadThreadsFromFile(filename) != 0) {
+    if (MyCpu.loadThreadsFromFile(filename) != 0) {
         cerr << "Error loading threads from file: " << filename << endl;
         return 1;
     }
 
     // Set the CPU time slice (example: 1 unit)
-    MyCore.setTimeSlice(1);
+    MyCpu.setTimeSlice(1);
 
     // Run the CPU simulation
-    MyCore.runCPU();
+    MyCpu.runCPU();
 
     // Print completed thread statistics
-    MyCore.printCompletedThreads();
+    MyCpu.printCompletedThreads();
 
     return 0;
 }

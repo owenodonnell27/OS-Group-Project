@@ -8,10 +8,10 @@
 
 using namespace std;
 
-class MyCore {
+class MyCpu {
 public:
-    // Creates MyCore class with time = 0 the default
-    MyCore();
+    // Creates MyCpu class with time = 0 the default
+    MyCpu();
 
     // Load files from a file (currently disabled)
     int loadThreadsFromFile(string filename);

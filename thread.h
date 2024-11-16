@@ -25,6 +25,7 @@ public:
     //age the thread
     void age();
 
+    // id and priority of the thread
     int id;
     int priority;
 

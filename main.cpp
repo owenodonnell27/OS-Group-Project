@@ -22,6 +22,12 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    // Debug: Print the arrival times of all loaded threads
+    //cout << "===============================" << endl;
+    //cout << "Debug: Arrival times of loaded threads" << endl;
+    //myCpu.printArrivalTimes();
+    cout << "===============================" << endl;
+
     // Set the CPU time slice (example: 1 unit)
     myCpu.setTimeSlice(1);
 

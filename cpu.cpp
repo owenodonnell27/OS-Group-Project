@@ -15,6 +15,7 @@ int MyCpu::loadThreadsFromFile(string filename) {
     string line;
 
     // Using the data on each line of the supplied file, create a thread and add it to the CPU
+    // The four arguments that the file has are (1): ID, (2): Priority, (3): Time of Arrival, (4): Time to completion
     while (getline(f, line)) {
         istringstream job(line);
         vector<int> jobArgs;
@@ -117,19 +118,23 @@ int MyCpu::runCPU() {
 }
 
 void MyCpu::ageThreads(){
+    // Vector to store threads while they are out of the queue
     vector<MyThread> readyThreads;
-
+    
+    // Remove all the threads from the queue
     while(!readyQueue.empty()) {
         readyThreads.push_back(readyQueue.top());
         readyQueue.pop();
     }
 
+    // Make aging adjustments
     int s = readyThreads.size();
     for (int i = 0; i < s; i++){
         cout << "ID: " << readyThreads[i].id << " Priority: " << readyThreads[i].priority << " Wait: " << readyThreads[i].waitTime << endl;
         readyThreads[i].age();
     }
 
+    // Add threads back to the queue
     while(!readyThreads.empty()) {
         readyQueue.push(readyThreads.back());
         readyThreads.pop_back();
@@ -138,6 +143,7 @@ void MyCpu::ageThreads(){
 
 void MyCpu::printReadyThreads() {
 
+    // Print all the threads
     while(!readyQueue.empty()) {
         MyThread thread = readyQueue.top();
         cout << "ID: " << thread.id << ", Priority: " << thread.priority << ", TOA: " << thread.toa

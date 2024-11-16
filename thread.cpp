@@ -35,7 +35,10 @@ void MyThread::setPriority(int newPriority){
 
 //age implementation
 void MyThread::age(){
+    // Increase the threads waiting time
     waitTime++;
+
+    // If a threads as been waiting for longer than 3 units of time, increase the thread's priority and set the waiting time to 0
     if (waitTime > 3){
         if (priority > 1) {
             priority--;

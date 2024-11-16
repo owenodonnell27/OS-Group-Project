@@ -44,6 +44,7 @@ public:
     // Set how much time the CPU works on one thread for
     void setTimeSlice(int newTimeSlice) {timeSlice = newTimeSlice;}
 
+    // Function to age ready threads
     void ageThreads();
 
 private:

@@ -59,9 +59,6 @@ private:
     // The one thread that is running
     MyThread running;
 
-    // Blocked threads
-    vector<MyThread> blocked;
-
     // Time interval and how much time CPU work on one thread
     int time;
     int timeSlice;

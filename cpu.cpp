@@ -63,6 +63,7 @@ int MyCpu::runNextThread() {
 
     // Thread using the CPU
     running.ttc -= timeSlice;
+    running.waitTime = 0;
     cout << "Thread " << running.id << " doing work on the CPU. Has " << running.ttc << " left." << endl;
 
     // Depening if the thread still needs to the CPU it will be added back to ready queue
@@ -85,7 +86,7 @@ int MyCpu::runCPU() {
     
     // As long as there are threads in the readyQueue or coming in the future
     while(!readyQueue.empty() || !futureThreads.empty()) {
-        cout << "Time " << time << endl;
+        
         // Check if the threads in futureThreads can be added to readyQueue
         if(!futureThreads.empty()) {
             /* while(futureThreads.back().toa == time) {
@@ -105,7 +106,6 @@ int MyCpu::runCPU() {
         }
         // If there are threads in readyQueue, let them use the CPU
         if(!readyQueue.empty()) {
-            cout << "Running next thread\n";
             //cout << "Debug: Running next thread from ready queue at time " << time << endl;
             runNextThread();
         }
@@ -117,8 +117,22 @@ int MyCpu::runCPU() {
 }
 
 void MyCpu::ageThreads(){
-    for (int i = 0; i < blocked.size(); i++){
-        blocked[i].age();
+    vector<MyThread> readyThreads;
+
+    while(!readyQueue.empty()) {
+        readyThreads.push_back(readyQueue.top());
+        readyQueue.pop();
+    }
+
+    int s = readyThreads.size();
+    for (int i = 0; i < s; i++){
+        cout << "ID: " << readyThreads[i].id << " Priority: " << readyThreads[i].priority << " Wait: " << readyThreads[i].waitTime << endl;
+        readyThreads[i].age();
+    }
+
+    while(!readyThreads.empty()) {
+        readyQueue.push(readyThreads.back());
+        readyThreads.pop_back();
     }
 }
 

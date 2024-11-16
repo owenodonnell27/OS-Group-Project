@@ -6,7 +6,7 @@ public:
     // Thread constructors
     MyThread() {}
     MyThread(int id, int priority, long long toa, long long ttc): 
-        id(id), priority(priority), toa(toa), ttc(ttc), state(0), toc(-1), responseTime(-1) {}
+        id(id), priority(priority), waitTime(0), toa(toa), ttc(ttc), state(0), toc(-1), responseTime(-1) {}
 
     // operator overloading used for CPU's priority queue
     // Based off priority and toa

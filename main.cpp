@@ -14,10 +14,10 @@ int main(int argc, char* argv[]) {
     string filename = argv[1];
 
     // Initialize the CPU
-    MyCpu myCpu;
+    MyCore MyCore;
 
     // Load threads from the file
-    if (myCpu.loadThreadsFromFile(filename) != 0) {
+    if (MyCore.loadThreadsFromFile(filename) != 0) {
         cerr << "Error loading threads from file: " << filename << endl;
         return 1;
     }
@@ -29,13 +29,13 @@ int main(int argc, char* argv[]) {
     cout << "===============================" << endl;
 
     // Set the CPU time slice (example: 1 unit)
-    myCpu.setTimeSlice(1);
+    MyCore.setTimeSlice(1);
 
     // Run the CPU simulation
-    myCpu.runCPU();
+    MyCore.runCPU();
 
     // Print completed thread statistics
-    myCpu.printCompletedThreads();
+    MyCore.printCompletedThreads();
 
     return 0;
 }

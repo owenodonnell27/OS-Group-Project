@@ -1,4 +1,4 @@
-#include "cpu.h"
+#include "core.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -6,11 +6,11 @@
 
 using namespace std;
 
-MyCpu::MyCpu() : time(0), timeSlice(1) {  // Ensure both variables are initialized
+MyCore::MyCore() : time(0), timeSlice(1) {  // Ensure both variables are initialized
     //cout << "Debug: Initial time: " << time << endl;  // Debugging initial time
 }
 
-int MyCpu::loadThreadsFromFile(string filename) {
+int MyCore::loadThreadsFromFile(string filename) {
     ifstream f(filename);
     string line;
 
@@ -32,7 +32,7 @@ int MyCpu::loadThreadsFromFile(string filename) {
     return 0;
 }
 
-int MyCpu::loadThread(MyThread thread) {
+int MyCore::loadThread(MyThread thread) {
     // Add thread to the vector of future threads
     futureThreads.push_back(thread);
 
@@ -41,7 +41,7 @@ int MyCpu::loadThread(MyThread thread) {
     return 0;
 }
 
-int MyCpu::runNextThread() {
+int MyCore::runNextThread() {
     // Print a separator for each time step
     cout << "==============================" << endl;
     cout << "Time " << time << endl;
@@ -83,7 +83,7 @@ int MyCpu::runNextThread() {
 }
 
 
-int MyCpu::runCPU() {
+int MyCore::runCPU() {
     
     // As long as there are threads in the readyQueue or coming in the future
     while(!readyQueue.empty() || !futureThreads.empty()) {
@@ -117,7 +117,7 @@ int MyCpu::runCPU() {
     return 0;
 }
 
-void MyCpu::ageThreads(){
+void MyCore::ageThreads(){
     // Vector to store threads while they are out of the queue
     vector<MyThread> readyThreads;
     
@@ -141,7 +141,7 @@ void MyCpu::ageThreads(){
     }
 }
 
-void MyCpu::printReadyThreads() {
+void MyCore::printReadyThreads() {
 
     // Print all the threads
     while(!readyQueue.empty()) {
@@ -154,7 +154,7 @@ void MyCpu::printReadyThreads() {
 }
 
 // print all threads once completed
-void MyCpu::printCompletedThreads() {
+void MyCore::printCompletedThreads() {
     cout << "==============================" << endl;
     cout << "Statistics" << endl;
     cout << "------------------------------" << endl;
@@ -176,7 +176,7 @@ void MyCpu::printCompletedThreads() {
 }
 
 // print cpu stats (average response time, average turnaround)
-void MyCpu::printCPUStats() {
+void MyCore::printCPUStats() {
 
     // Does so by taking the average of all the thread stats
     int numThreads = 0;
@@ -196,7 +196,7 @@ void MyCpu::printCPUStats() {
 }
 
 // print arrival time of threads
-void MyCpu::printArrivalTimes() {
+void MyCore::printArrivalTimes() {
     // Copy the readyQueue to preserve the order
     priority_queue<MyThread> tempQueue = readyQueue;
     
